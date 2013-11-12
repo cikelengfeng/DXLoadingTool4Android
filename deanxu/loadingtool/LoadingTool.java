@@ -152,12 +152,12 @@ public final class LoadingTool {
      *
      * @param target 需要设置loading效果的view，不能为null
      */
-    public static void showLoadingInDefaultModeForView(final View target, final String id) {
-        showLoadingInDefaultModeForView(target, id, Integer.MAX_VALUE);
-    }
-
     public static void showLoadingInDefaultModeForView(final View target, final String id,int timeout) {
         showLoading(target, id, defaultInterceptor, timeout);
+    }
+
+    public static void showLoadingInDefaultModeForView(final View target, final String id) {
+        showLoadingInDefaultModeForView(target, id, Integer.MAX_VALUE);
     }
 
     /**
@@ -165,8 +165,12 @@ public final class LoadingTool {
      *
      * @param view 需要设置loading效果的view，不能为null
      */
+    public static void showLoadingInScaleModeForView(final View view, final String id,int timeout) {
+        showLoading(view, id, LOADING_SCALE_INTERCEPTOR, timeout);
+    }
+
     public static void showLoadingInScaleModeForView(final View view, final String id) {
-        showLoading(view, id, LOADING_SCALE_INTERCEPTOR, Integer.MAX_VALUE);
+        showLoadingInScaleModeForView(view, id, Integer.MAX_VALUE);
     }
 
     /**
@@ -174,8 +178,12 @@ public final class LoadingTool {
      *
      * @param view 需要设置loading效果的view，不能为null
      */
+    public static void showLoadingInRotateModeForView(final View view, final String id,int timeout) {
+        showLoading(view, id, LOADING_ROTATE_INTERCEPTOR, timeout);
+    }
+
     public static void showLoadingInRotateModeForView(final View view, final String id) {
-        showLoading(view, id, LOADING_ROTATE_INTERCEPTOR, Integer.MAX_VALUE);
+        showLoadingInRotateModeForView(view, id, Integer.MAX_VALUE);
     }
 
     /**
@@ -183,8 +191,12 @@ public final class LoadingTool {
      *
      * @param view 需要设置loading效果的view，不能为null
      */
+    public static void showLoadingInAlphaModeForView(final View view, final String id,int timeout) {
+        showLoading(view, id, LOADING_ALPHA_INTERCEPTOR, timeout);
+    }
+
     public static void showLoadingInAlphaModeForView(final View view, final String id) {
-        showLoading(view, id, LOADING_ALPHA_INTERCEPTOR, Integer.MAX_VALUE);
+        showLoadingInAlphaModeForView(view, id, Integer.MAX_VALUE);
     }
 
     /**
@@ -192,7 +204,7 @@ public final class LoadingTool {
      *
      * @param target          需要设置loading效果的view，不能为null
      * @param userInterceptor 拦截器
-     * @param timeOut         loading效果的超时时间，超时后自动取消loading效果
+     * @param timeOut         loading效果的超时时间，超时后自动取消loading效果 in millisecond
      */
     public static void showLoading(final View target, final String id, LoadingToolInterceptor<View> userInterceptor, int timeOut) {
         Log.d("loadingtool", "id " + id + " need to show");
@@ -211,9 +223,9 @@ public final class LoadingTool {
             info.interceptor = userInterceptor;
             info.setTargetView(target);
             long currentMill = System.currentTimeMillis();
-            info.deadLineTime = Integer.MAX_VALUE - timeOut > currentMill ? currentMill + timeOut : Integer.MAX_VALUE;
             userInterceptor.makeViewLoading(target);
             putCallbackInfo(id,info);
+            info.deadLineTime = Integer.MAX_VALUE - timeOut > currentMill ? currentMill + timeOut : Integer.MAX_VALUE;
             target.postDelayed(callback, timeOut);
         }else {
             Log.d("loadingtool", "userInterceptor is null,do nothing");
