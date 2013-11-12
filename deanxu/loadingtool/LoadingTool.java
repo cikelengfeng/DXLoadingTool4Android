@@ -245,10 +245,10 @@ public final class LoadingTool {
             if (target != null) {
                 info.interceptor.makeViewIdle(info.getTargetView());
                 target.removeCallbacks(info.timeoutCallback);
-                removeCallbackInfoSafely(id);
             }else {
                 Log.d("loadingtool", "target is null,this id may be in Pasued state,please call resume instead");
             }
+            removeCallbackInfoSafely(id);
         }else {
             Log.d("loadingtool", "callbackinfo is null,do nothing");
         }
