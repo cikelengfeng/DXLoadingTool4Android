@@ -2,6 +2,7 @@ package deanxu.loadingtool;
 
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
@@ -9,7 +10,6 @@ import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.view.animation.ScaleAnimation;
 import android.widget.ProgressBar;
-import com.xiachufang.utils.Log;
 
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
@@ -195,7 +195,7 @@ public final class LoadingTool {
      * @param timeOut         loading效果的超时时间，超时后自动取消loading效果
      */
     public static void showLoading(final View target, final String id, LoadingToolInterceptor<View> userInterceptor, int timeOut) {
-        Log.d("id "+id + " need to show");
+        Log.d("loadingtool", "id " + id + " need to show");
         if (infoMap.containsKey(id) && infoMap.get(id).getTargetView()!= null && infoMap.get(id).getTargetView().equals(target)) {//is loading
             return;
         }
@@ -216,7 +216,7 @@ public final class LoadingTool {
             putCallbackInfo(id,info);
             target.postDelayed(callback, timeOut);
         }else {
-            Log.d("userInterceptor is null,do nothing");
+            Log.d("loadingtool", "userInterceptor is null,do nothing");
         }
     }
 
@@ -226,7 +226,7 @@ public final class LoadingTool {
      * @param id 需要取消loading状态的id
      */
     public static void hideLoading(final String id) {
-        Log.d("id "+id + " need to hide");
+        Log.d("loadingtool", "id "+id + " need to hide");
         CallbackInfo info = infoMap.get(id);
         if (info != null) {
             View target = info.getTargetView();
@@ -235,10 +235,10 @@ public final class LoadingTool {
                 target.removeCallbacks(info.timeoutCallback);
                 removeCallbackInfoSafely(id);
             }else {
-                Log.d("target is null,this id may be in Pasued state,please call resume instead");
+                Log.d("loadingtool", "target is null,this id may be in Pasued state,please call resume instead");
             }
         }else {
-            Log.d("callbackinfo is null,do nothing");
+            Log.d("loadingtool", "callbackinfo is null,do nothing");
         }
 
     }
@@ -251,18 +251,18 @@ public final class LoadingTool {
      * @param id   用于恢复的标志,id应该是整个程序上下文中唯一的值
      */
     public static void pause(final String id) {
-        Log.d("id "+id + " need to pause");
+        Log.d("loadingtool", "id "+id + " need to pause");
         if (infoMap.containsKey(id)) {
             CallbackInfo info = infoMap.get(id);
             View target = info.getTargetView();
             if (target != null) {
                 info.interceptor.makeViewIdle(target);
             }else {
-                Log.d("but the id's target view is null");
+                Log.d("loadingtool", "but the id's target view is null");
             }
             info.setTargetView(null);
         }else {
-            Log.d("id is not in infomap,it may has been removed by hideloading call or never be in loading state");
+            Log.d("loadingtool", "id is not in infomap,it may has been removed by hideloading call or never be in loading state");
         }
     }
 
@@ -275,13 +275,13 @@ public final class LoadingTool {
      * @param id   用于恢复的标志,id应该是整个程序上下文中唯一的值
      */
     public static void resume(final View target, final String id) {
-        Log.d("id "+id + " need to resume");
+        Log.d("loadingtool", "id "+id + " need to resume");
         CallbackInfo info = infoMap.get(id);
         if (info != null && info.getTargetView() == null) {
             info.interceptor.makeViewLoading(target);
             info.setTargetView(target);
         }else {
-            Log.d("this id is not in paused state,make showLoading call instead");
+            Log.d("loadingtool", "this id is not in paused state,make showLoading call instead");
         }
     }
 
